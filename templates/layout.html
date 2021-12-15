@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Index page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'stylesheets/layout.css' %}">
+    <link rel="stylesheet" href="{% static 'stylesheets/section_schema.css' %}">
+    <link rel="stylesheet" href="{% static 'stylesheets/creation_schema.css' %}">
+    <script src="{% static 'js/add_column.js' %}"></script>
+</head>
+<body>
+ <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <p class="navbar-text"><span class="color-black text-size-large"> WebSiteName </span> </p>
+    </div>
+    <a href="{% url 'index' %}" class="navbar-text"> <span class="color-black text-size-large"> Schemas</span></a>
+    <!-- <p class="navbar-text text-black "> Schemas </p> -->
+    <!-- <ul class="nav navbar-nav">
+      <li><a href="#"></a></li>
+      <li><a href="#">Page 1</a></li>
+      <li><a href="#">Page 2</a></li>
+    </ul> -->
+    <ul class="nav navbar-nav navbar-right">
+        <li class="navbar-text"> <span class="text-size-large">Hello, <b>{{user}}</b> </span> </li>
+        <li><a href="#" class="text-size-large"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+    </ul>
+  </div>
+</nav>
+        {% block body %}
+        {% endblock %}
+</body>
+</html>

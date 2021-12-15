@@ -1,0 +1,29 @@
+
+.section-schema {
+    margin: 0 15% 0 3%;
+}
+
+.align-right {
+    text-align: right;
+}
+
+.position-relative {
+    position: relative;
+    bottom: 15px;
+}
+
+.table-name {
+    margin: 20px 0 0 0;
+}
+
+#delete-button {
+    color: #D9534F;
+}
+
+a {
+    color: #0275D8;
+}
+
+.btn-link {
+    color: #0275D8;
+}

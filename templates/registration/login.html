@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'stylesheets/login.css' %}">
+<!--    <link rel="stylesheet" href="{% static 'static.css' %}">-->
+</head>
+<body>
+    {% block main %}
+    <div class="container mt-3 p-3" id="central-container">
+        <div class = "d-flex justify-content-center" id="error-message">
+            <div lass="p-2 bd-highlight" id="flex-item"> <h2> Log In </h2></div>
+            {% if message %}
+            <div lass="p-2 bd-highlight" id="flex-item"> <h4 class="alert alert-warning"> {{ message }} </h4> </div>
+            {% endif %}
+        </div>
+        <div class = "d-flex justify-content-center" id="login">
+            
+            <form class="form-horizontal" id="login-form" name="LoginForm" action="{{ login_url }}" method="post">
+            {% csrf_token %}
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}" />
+            {% endif %}
+            <div class="control-group py-3">
+                <div class="controls m-3 p-3" id="form-element">
+                    <input type="text" id="username" name="username"  placeholder="Username">
+                </div>
+            </div>
+            <div class="control-group py-3">
+                <div class="controls py-3" id="form-element">
+                    <input type="password" name="password" id="password" placeholder="Password">
+                </div>
+            </div>
+            <div class="control-group py-3">
+                <div class="controls py-3" id="submit-button">
+                    <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                </div>
+            </div>
+    </div>
+        </form>
+    </div>
+{% endblock %}
+</body>
+</html>
