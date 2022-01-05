@@ -33,7 +33,10 @@ def login_view(request):
     else:
         return render(request, "registration/login.html", {"login_url": reverse('login')})
 
+
 @login_required
 def create_schema(request):
     if request.method == "GET":
         return render(request, "schema_creation.html")
+    if request.method == "POST":
+        print(request.POST)

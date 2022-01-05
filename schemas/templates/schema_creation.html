@@ -7,27 +7,28 @@
         <h2 class="table-name"> New schema </h2>
     </div>
     <div class="row">
-            <form> 
+            <form method="POST" role="form" action="{% url 'create_schema' %}" onsubmit="convert_form_to_json(event)"> 
+            {% csrf_token %}
                 <div class="align-right position-relative">
-                    <button type="submit" href="{% url 'create_schema' %}" class="btn btn-primary btn-lg align-right position-relative " role="button" aria-pressed="true">Submit</button>
+                    <button type="submit"  class="btn btn-primary btn-lg align-right position-relative " role="button" aria-pressed="true">Submit</button>
                 </div>
                     <div class="form-group">
-                        <label for="exampleFormControlInput1">Name</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput1">
+                        <label for="schemaName">Name</label>
+                        <input type="text" class="form-control" name="schemaName" id="schemaName">
                     </div>
                     <div class="form-group">
-                        <label for="customSelect1">Column separator</label>
-                        <select class="custom-select form-select-lg" id="customSelect1">
-                          <option value="">Comma (,)</option>
+                        <label for="columnSeparator">Column separator</label>
+                        <select class="custom-select form-select-lg" name='columnSeparator' id="columnSeparator">
+                          <option value=",">Comma (,)</option>
                           <option value="1">One</option>
                           <option value="2">Two</option>
                           <option value="3">Three</option>
                         </select>
                       </div>
                       <div class="form-group">
-                        <label for="customSelect2">String character</label>
-                        <select class="custom-select form-select-lg" id="customSelect2">
-                          <option value="">Double-quote (“)</option>
+                        <label for="stringCharachter">String character</label>
+                        <select class="custom-select form-select-lg" name="stringCharachter" id="stringCharachter">
+                          <option value="&quot;">Double-quote (“)</option>
                           <option value="1">One</option>
                           <option value="2">Two</option>
                           <option value="3">Three</option>
@@ -38,49 +39,47 @@
                             <div class="container" id="listOfColumns">
 
                             </div>
-                                <form>
-                                    <div class="container">
-                                        <div class="row" id="userCreatedColumn">
-                                            <div class="col">
-                                                <label for="exampleFormControlInput3">Name</label>
-                                                <input type="text" class="form-control" id="exampleFormControlInput3">
-                                            </div>
-                                            <div class="col">
-                                                <label for="exampleFormControlInput3">Type</label>
-                                                <select class="custom-select form-select-lg" id="customSelect3" required>
-                                                    <option value="">_____</option>
-                                                    <option value="1">Full name</option>
-                                                    <option value="2">Job</option>
-                                                    <option value="3">Integer</option>
-                                                  </select>
-                                            </div>
-                                            <div class="col-sm hidden">
-                                                <label for="rangeFrom">From</label>
-                                                <input type="number" class="form-control" id="rangeFrom">
-                                            </div>
-                                            <div class="col-sm hidden">
-                                                <label for="rangeTo">To</label>
-                                                <input type="number" class="form-control" id="rangeTo">
-                                            </div>
-                                            <div class="col-sm float-right">
-                                                <label for="rangeTo">Order</label>
-                                                <div>
-                                                    <input type="text" class="col form-control" id="order">
-                                                    <a href="#" class="col float-right text-size-large" id="delete-button"> Delete </a>
+                        </div>
+            </form>
+                                    <div class="container" id="columnCreator">
+                                            <div class="row" id="userCreatedColumn">
+                                                <div class="col">
+                                                    <label for="exampleFormControlInputA">Name</label>
+                                                    <input type="text" class="form-control" id="exampleFormControlInputA">
                                                 </div>
-                                                
+                                                <div class="col">
+                                                    <label for="exampleFormControlInputA">Type</label>
+                                                    <select class="custom-select form-select-lg" id="customSelectA" onchange="update_select(this);" required>
+                                                        <!-- <option value="">_____</option> -->
+                                                        <option value="full_name">Full name</option>
+                                                        <option value="job">Job</option>
+                                                        <option value="integer">Integer</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm hidden">
+                                                    <label for="customSelectAFrom">From</label>
+                                                    <input type="number" class="form-control" id="customSelectAFrom">
+                                                </div>
+                                                <div class="col-sm hidden">
+                                                    <label for="customSelectATo">To</label>
+                                                    <input type="number" class="form-control" id="customSelectATo">
+                                                </div>
+                                                <div class="col-sm float-right">
+                                                    <label for="rangeTo">Order</label>
+                                                    <div>
+                                                        <input type="text" class="col form-control" id="order" readonly>
+                                                        <a href="#" class="col float-right text-size-large" id="delete-button"> Delete </a>
+                                                    </div>
+                                                    
+                                                </div>
                                             </div>
-                                        </div>
                                         <div class="row">
                                             <div class="col">
-                                                <button type="submit" onclick="add_column()" class="btn btn-primary btn-lg" id="submitColumn">Add column</button>
+                                                <button type="button" onclick="add_column()" class="btn btn-primary btn-lg" id="submitColumn">Add column</button>
                                             </div>
                                         </div>
                                     </div>
-                                </form>
                         </div>
-            </form>
-    </div>
 </section>
 
 {% endblock %}
