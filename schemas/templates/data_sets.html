@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+
+<section class="section-schema">
+   <div class="row">
+        <h1 class="table-name"> Data Sets </h1>
+   </div>
+    <div class="row justify-content-end position-relative position-relative">
+        <form method="POST" role="form">
+            {% csrf_token %}
+            Rows:
+            <input type="number" name="rowsAmount">
+            <button type="submit" href="{% url 'create_schema' %}" 
+            class="btn btn-success btn-lg active btn-lg" role="button" 
+            aria-pressed="true">Generate data</button>
+        </form>
+
+    </div>
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Created</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for date, timestamp in data_sets %}
+            <tr>
+                <th scope="row"> <b> {{ iterator }} </b></th>
+                <td><a href="#">{{date}}</a></td>
+                <td> <div id="status{{ timestamp }}"> </div></td>
+                <td>
+                    <a href="{% url 'load_data_set' schema_id timestamp %}" class="btn btn-link">Download</a>
+                    <a id="delete-button" href="###" class="btn btn-link" role="button" aria-pressed="true">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+  {% endblock %}

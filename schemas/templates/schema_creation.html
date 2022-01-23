@@ -7,7 +7,7 @@
         <h2 class="table-name"> New schema </h2>
     </div>
     <div class="row">
-            <form method="POST" role="form" action="{% url 'create_schema' %}" onsubmit="convert_form_to_json(event)"> 
+            <form method="POST" role="form" action="{% url 'create_schema' %}" onsubmit="convert_form_to_json(event)" id="schema_creation"> 
             {% csrf_token %}
                 <div class="align-right position-relative">
                     <button type="submit"  class="btn btn-primary btn-lg align-right position-relative " role="button" aria-pressed="true">Submit</button>
@@ -17,8 +17,8 @@
                         <input type="text" class="form-control" name="schemaName" id="schemaName">
                     </div>
                     <div class="form-group">
-                        <label for="columnSeparator">Column separator</label>
-                        <select class="custom-select form-select-lg" name='columnSeparator' id="columnSeparator">
+                        <label for="separatorColumn">Column separator</label>
+                        <select class="custom-select form-select-lg" name='separatorColumn' id="separatorColumn">
                           <option value=",">Comma (,)</option>
                           <option value="1">One</option>
                           <option value="2">Two</option>
@@ -44,12 +44,12 @@
                                     <div class="container" id="columnCreator">
                                             <div class="row" id="userCreatedColumn">
                                                 <div class="col">
-                                                    <label for="exampleFormControlInputA">Name</label>
-                                                    <input type="text" class="form-control" id="exampleFormControlInputA">
+                                                    <label for="columnName">Name</label>
+                                                    <input type="text" class="form-control" id="columnName">
                                                 </div>
                                                 <div class="col">
-                                                    <label for="exampleFormControlInputA">Type</label>
-                                                    <select class="custom-select form-select-lg" id="customSelectA" onchange="update_select(this);" required>
+                                                    <label for="columnType">Type</label>
+                                                    <select class="custom-select form-select-lg" id="columnType" onchange="update_select(this);" required>
                                                         <!-- <option value="">_____</option> -->
                                                         <option value="full_name">Full name</option>
                                                         <option value="job">Job</option>
@@ -57,17 +57,17 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-sm hidden">
-                                                    <label for="customSelectAFrom">From</label>
-                                                    <input type="number" class="form-control" id="customSelectAFrom">
+                                                    <label for="columnTypeFrom">From</label>
+                                                    <input type="number" class="form-control" id="columnTypeFrom">
                                                 </div>
                                                 <div class="col-sm hidden">
-                                                    <label for="customSelectATo">To</label>
-                                                    <input type="number" class="form-control" id="customSelectATo">
+                                                    <label for="columnTypeTo">To</label>
+                                                    <input type="number" class="form-control" id="columnTypeTo">
                                                 </div>
                                                 <div class="col-sm float-right">
-                                                    <label for="rangeTo">Order</label>
+                                                    <label for="columnOrder">Order</label>
                                                     <div>
-                                                        <input type="text" class="col form-control" id="order" readonly>
+                                                        <input type="text" class="col form-control" id="columnOrder" readonly>
                                                         <a href="#" class="col float-right text-size-large" id="delete-button"> Delete </a>
                                                     </div>
                                                     

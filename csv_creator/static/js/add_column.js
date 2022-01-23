@@ -9,15 +9,15 @@ function add_column() {
     // console.log(order)
 
     for (let i = 0; i < inputs.length; i++) {
-        if (inputs[i].id.startsWith('order')) {
+        if (inputs[i].id.startsWith('columnOrder')) {
             inputs[i].value = order
             inputs[i].id += order
         } 
-        else if (inputs[i].id.startsWith('customSelectAFrom')) {
-            inputs[i].id = "customSelectA" + order + "From"
+        else if (inputs[i].id.startsWith('columnTypeFrom')) {
+            inputs[i].id = "columnType" + order + "From"
         }
-        else if (inputs[i].id.startsWith('customSelectATo')) {
-            inputs[i].id = "customSelectA" + order + "To"
+        else if (inputs[i].id.startsWith('columnTypeTo')) {
+            inputs[i].id = "columnType" + order + "To"
         } else {
             inputs[i].id += order
         }
@@ -29,12 +29,12 @@ function add_column() {
     document.getElementById('listOfColumns').append(element)
 
     for (let i = 0; i < inputs.length; i++) {
-        if (inputs[i].id.startsWith('customSelectA')) {
+        if (inputs[i].id.startsWith('columnType')) {
             if (inputs[i].id.endsWith('From')) {
-                inputs[i].id = 'customSelectA' + 'From'
+                inputs[i].id = 'columnType' + 'From'
             }
             else if (inputs[i].id.endsWith('To')) {
-                inputs[i].id = 'customSelectA' + 'To'
+                inputs[i].id = 'columnType' + 'To'
             }
             else {
                 inputs[i].id = inputs[i].id.substring(0, inputs[i].id.indexOf(order.toString()))

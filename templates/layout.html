@@ -3,34 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Index page</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
     {% load static %}
     <link rel="stylesheet" href="{% static 'stylesheets/layout.css' %}">
     <link rel="stylesheet" href="{% static 'stylesheets/section_schema.css' %}">
     <link rel="stylesheet" href="{% static 'stylesheets/creation_schema.css' %}">
-    <script src="{% static 'js/add_column.js' %}"></script>
-    <script src="{% static 'js/new_schema_form_to_json.js' %}"></script>
+
 </head>
 <body>
- <nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
+ <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
       <p class="navbar-text"><span class="color-black text-size-large"> WebSiteName </span> </p>
     </div>
-    <a href="{% url 'index' %}" class="navbar-text"> <span class="color-black text-size-large"> Schemas</span></a>
-    <!-- <p class="navbar-text text-black "> Schemas </p> -->
-    <!-- <ul class="nav navbar-nav">
-      <li><a href="#"></a></li>
-      <li><a href="#">Page 1</a></li>
-      <li><a href="#">Page 2</a></li>
-    </ul> -->
-    <ul class="nav navbar-nav navbar-right">
-        <li class="navbar-text"> <span class="text-size-large">Hello, <b>{{user}}</b> </span> </li>
-        <li><a href="#" class="text-size-large"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-    </ul>
-  </div>
+    <div class="navbar-nav w-100">
+        <a href="{% url 'index' %}" class="nav-item navbar-text align-left"> <span class="color-black text-size-large"> Schemas</span></a>
+        <ul class="nav-item ml-auto">
+                <span class="nav-item navbar-text text-size-large mx-3">Hello, <b>{{user}}</b> </span> 
+                <a href="#" class="nav-item text-size-large"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+        </ul>
+    </div>
 </nav>
         {% block body %}
         {% endblock %}
 </body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="{% static 'js/add_column.js' %}"></script>
+<script src="{% static 'js/new_schema_form_to_json.js' %}"></script>
+<script src="{% static 'js/is_dataset_ready.js' %}"></script>
 </html>
