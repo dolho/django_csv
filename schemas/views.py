@@ -46,13 +46,44 @@ class SchemaCreationView(LoginRequiredMixin, View):
             return HttpResponseBadRequest()
 
 
-class CreateDataSetView(LoginRequiredMixin, View):
+class DataSetCreationView(LoginRequiredMixin, View):
 
     def get(self, request, schema_id):
-        pass
+        schema = get_object_or_404(Schema, pk=schema_id)
+        schema_data_sets_directory = SCHEMA_SERVICE.get_schema_folder_path(request.user.id, schema_id)
+        result = []
+        try:
+            for filename in os.scandir(schema_data_sets_directory):
+                if filename.is_file():
+                    name_without_extension = Path(filename).stem
+                    result.append(
+                        (datetime.fromtimestamp(float(name_without_extension)).date(), name_without_extension))
+        except FileNotFoundError:
+            pass
+        return render(request, "data_sets.html",
+                      {'iterator': functools.partial(next, itertools.count()),
+                       'data_sets': result,
+                       'schema_id': schema_id
+                       })
 
-    def post(self, request):
-        pass
+    def post(self, request, schema_id):
+        schema = get_object_or_404(Schema, pk=schema_id)
+        try:
+            amount_of_rows = int(request.POST['rowsAmount'])
+        except ValueError:
+            return HttpResponseBadRequest()
+        time_now = time.time()
+        generate_csv.delay(schema.columns, time_now, request.user.id, schema_id, amount_of_rows)
+        return HttpResponseRedirect(reverse("create_data_set", kwargs={'schema_id': schema_id}))
+
+class DataSetLoadView(LoginRequiredMixin, View):
+
+    def get(self, request, schema_id, timestamp):
+        path = SCHEMA_SERVICE.get_schema_folder_path(request.user.id, schema_id)
+        csv_data_set = open(os.path.join(path, timestamp + '.csv'), 'rb')
+        response = FileResponse(csv_data_set)
+        return response
+
 # @login_required
 # def index(request):
 #     schemas = Schema.objects.filter(author_id=request.user)
@@ -102,37 +133,37 @@ def login_view(request):
 # FAKE_CSV_GENERATOR = FakeCSVGenerator()
 SCHEMA_SERVICE = SchemaService()
 
-@login_required
-def create_data_set(request, schema_id):
-    schema = get_object_or_404(Schema, pk=schema_id)
-    if request.method == "GET":
-        schema_data_sets_directory = SCHEMA_SERVICE.get_schema_folder_path(request.user.id, schema_id)
-        result = []
-        try:
-            for filename in os.scandir(schema_data_sets_directory):
-                if filename.is_file():
-                    name_without_extension = Path(filename).stem
-                    result.append((datetime.fromtimestamp(float(name_without_extension)).date(), name_without_extension))
-        except FileNotFoundError:
-            pass
-        return render(request, "data_sets.html",
-                      {'iterator': functools.partial(next, itertools.count()),
-                       'data_sets': result,
-                       'schema_id': schema_id
-                       })
-    if request.method == "POST":
-        try:
-            amount_of_rows = int(request.POST['rowsAmount'])
-        except ValueError:
-            return HttpResponseBadRequest()
-        time_now = time.time()
-        generate_csv.delay(schema.columns, time_now, request.user.id, schema_id, amount_of_rows)
-        return HttpResponseRedirect(reverse("create_data_set", kwargs={'schema_id': schema_id}))
+# @login_required
+# def create_data_set(request, schema_id):
+#     schema = get_object_or_404(Schema, pk=schema_id)
+#     if request.method == "GET":
+#         schema_data_sets_directory = SCHEMA_SERVICE.get_schema_folder_path(request.user.id, schema_id)
+#         result = []
+#         try:
+#             for filename in os.scandir(schema_data_sets_directory):
+#                 if filename.is_file():
+#                     name_without_extension = Path(filename).stem
+#                     result.append((datetime.fromtimestamp(float(name_without_extension)).date(), name_without_extension))
+#         except FileNotFoundError:
+#             pass
+#         return render(request, "data_sets.html",
+#                       {'iterator': functools.partial(next, itertools.count()),
+#                        'data_sets': result,
+#                        'schema_id': schema_id
+#                        })
+#     if request.method == "POST":
+#         try:
+#             amount_of_rows = int(request.POST['rowsAmount'])
+#         except ValueError:
+#             return HttpResponseBadRequest()
+#         time_now = time.time()
+#         generate_csv.delay(schema.columns, time_now, request.user.id, schema_id, amount_of_rows)
+#         return HttpResponseRedirect(reverse("create_data_set", kwargs={'schema_id': schema_id}))
 
 
-@login_required
-def load_data_set(request, schema_id, timestamp):
-    path = SCHEMA_SERVICE.get_schema_folder_path(request.user.id, schema_id)
-    csv_data_set = open(os.path.join(path, timestamp + '.csv'), 'rb')
-    response = FileResponse(csv_data_set)
-    return response
+# @login_required
+# def load_data_set(request, schema_id, timestamp):
+#     path = SCHEMA_SERVICE.get_schema_folder_path(request.user.id, schema_id)
+#     csv_data_set = open(os.path.join(path, timestamp + '.csv'), 'rb')
+#     response = FileResponse(csv_data_set)
+#     return response
