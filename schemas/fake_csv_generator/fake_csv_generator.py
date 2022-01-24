@@ -14,15 +14,16 @@ SCHEMA_SERVICE = SchemaService(IntegerColumn(0, 1, name='initial', faker=FAKER,
                                next=FullNameColumn(name='initial', faker=FAKER))))
 
 
-@app.task
-def generate_csv(schema_columns, time_of_creation, user_id, schema_id, amount=100):
+@app.task(bind=True)
+def generate_csv(self, schema_columns, time_of_creation, user_id, schema_id, amount=100):
+
     columns = SCHEMA_SERVICE.create_list_of_columns(schema_columns)
     schema_folder_path = SCHEMA_SERVICE.get_schema_folder_path(user_id, schema_id)
     try:
         os.makedirs(schema_folder_path, 0o777)
     except FileExistsError:
         pass
-    csv_file_path = os.path.join(schema_folder_path, str(time_of_creation) + '.csv')
+    csv_file_path = os.path.join(schema_folder_path, self.request.id + '.csv')
 
     with open(csv_file_path, 'w', newline='') as csvfile:
         fieldnames = [i.name for i in columns]

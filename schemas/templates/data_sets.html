@@ -2,7 +2,7 @@
 
 {% block body %}
 
-
+<div hidden id="schema_id">{{schema_id}}</div>
 <section class="section-schema">
    <div class="row">
         <h1 class="table-name"> Data Sets </h1>
@@ -29,13 +29,13 @@
             </tr>
             </thead>
             <tbody>
-            {% for date, timestamp in data_sets %}
+            {% for date, uuid in data_sets %}
             <tr>
                 <th scope="row"> <b> {{ iterator }} </b></th>
                 <td><a href="#">{{date}}</a></td>
-                <td> <div id="status{{ timestamp }}"> </div></td>
+                <td> <div id="status{{ uuid }}"> </div></td>
                 <td>
-                    <a href="{% url 'load_data_set' schema_id timestamp %}" class="btn btn-link">Download</a>
+                    <a href="{% url 'load_data_set' schema_id uuid %}" class="btn btn-link">Download</a>
                     <a id="delete-button" href="###" class="btn btn-link" role="button" aria-pressed="true">Delete</a>
                 </td>
             </tr>

@@ -37,9 +37,6 @@ websocket.onerror = function(evt) { onError(evt) };
  }
       
  function onMessage(evt) {
-    // There are two types of messages:
-    // 1. a chat participant message itself
-    // 2. a message with a number of connected chat participants
     const jsonText = evt.data
     console.log(jsonText)
     const messageObject = JSON.parse(jsonText)
@@ -58,10 +55,13 @@ websocket.onerror = function(evt) { onError(evt) };
  }
       
  function addMessage() {
+   let schema_id = document.getElementById("schema_id").innerText
    let status_of_csvs = document.querySelectorAll('[id^=status]')
    for(let i = 0; i < status_of_csvs.length; i++){
       console.log(status_of_csvs['i'])
-      let message = new AppMessage(MessageTypes.IS_CSV_READY, status_of_csvs[i].id.replace(/^(status)/, ''))
+      let message = new AppMessage(MessageTypes.IS_CSV_READY, 
+                                  {"data_set_id": status_of_csvs[i].id.replace(/^(status)/, ''), 
+                                   "schema_id": schema_id})
       // {"type": MessageTypes.IS_CSV_READY,
       //                "payload": status_of_csvs[i].id.replace(/^(status)/, '') }
       websocket.send(JSON.stringify(message));

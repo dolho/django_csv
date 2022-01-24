@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'csv_creator',
+
+    'django_celery_results',
     'schemas',
 
 ]
@@ -129,3 +131,9 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ASGI_APPLICATION = "csv_creator.asgi.application"
+
+CELERY_SEND_EVENTS = True
+CELERY_SEND_SENT_EVENT = True
+# CELERY_BROKER_BACKEND = "db+sqlite:///celery.sqlite"
+CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_RESULT_BACKEND = 'django-db'
