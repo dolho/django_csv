@@ -144,8 +144,11 @@ ASGI_APPLICATION = "csv_creator.asgi.application"
 # Celery Section
 CELERY_SEND_EVENTS = True
 CELERY_SEND_SENT_EVENT = True
-CELERY_CACHE_BACKEND = 'django-cache'
-CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_CACHE_BACKEND = 'django-cache'
+# CELERY_RESULT_BACKEND = 'django-db'
+
+CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
+CELERY_RESULT_BACKEND = os.environ['CELERY_BACKEND_RPC']
 
 # Whitenoise Section
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
