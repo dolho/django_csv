@@ -1,20 +1,30 @@
-{% extends 'layout.html' %} 
-
+{% extends 'layout.html' %}
+{% load static %}
 {% block body %}
 
+<div id="currentOrder" hidden>{{current_order}}</div>
 <section class="section-schema">
     <div class="row">
         <h2 class="table-name"> New schema </h2>
+        {{schema}}
     </div>
+
+
     <div class="row">
-            <form method="POST" role="form" action="{% url 'create_schema' %}" onsubmit="convert_form_to_json(event)" id="schema_creation"> 
+            <form method="POST" role="form" action="{% url 'create_schema' %}" onsubmit="convert_form_to_json(event)" id="schema_creation">
             {% csrf_token %}
                 <div class="align-right position-relative">
                     <button type="submit"  class="btn btn-primary btn-lg align-right position-relative " role="button" aria-pressed="true">Submit</button>
                 </div>
+                {{ errors }}
+                    {% for error in errors %}
+                        <div class="row justify-content-center alert alert-danger">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
                     <div class="form-group">
                         <label for="schemaName">Name</label>
-                        <input type="text" class="form-control" name="schemaName" id="schemaName">
+                        <input type="text" class="form-control" value="{{schema.name}}" name="schemaName" id="schemaName">
                     </div>
                     <div class="form-group">
                         <label for="separatorColumn">Column separator</label>
@@ -37,8 +47,63 @@
                         <div class="form-group">
                             <h2 class="table-name"> Schema columns </h2>
                             <div class="container" id="listOfColumns">
-
+                                {% for column in schema.columns %}
+                                <div class="row" id="userCreatedColumn{{column.columnOrder}}">
+                                                <div class="col">
+                                                    <label for="columnName">Name</label>
+                                                    <input type="text" class="form-control" id="columnName{{column.columnOrder}}" value="{{column.columnName}}">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="columnType{{column.columnOrder}}">Type</label>
+                                                    <select class="custom-select form-select-lg" id="columnType{{column.columnOrder}}" onchange="update_select(this);" required>
+                                                        {% if column.columnType == "full_name" %}
+                                                        <option value="full_name" selected>Full name</option>
+                                                        <option value="job">Job</option>
+                                                        <option value="integer">Integer</option>
+                                                        {% elif  column.columnType == "job" %}
+                                                        <option value="full_name">Full name</option>
+                                                        <option value="job" selected>Job</option>
+                                                        <option value="integer">Integer</option>
+                                                        {% elif column.columnType == "integer" %}
+                                                        <option value="full_name">Full name</option>
+                                                        <option value="job">Job</option>
+                                                        <option value="integer" selected>Integer</option>
+                                                        {% endif %}
+                                                    </select>
+                                                </div>
+                                                {% if column.from %}
+                                                <div class="col-sm">
+                                                    <label for="columnTypeFrom{{column.columnOrder}}">From</label>
+                                                    <input type="number" class="form-control" value="{{column.from}}" id="columnTypeFrom{{column.columnOrder}}">
+                                                </div>
+                                                {% else %}
+                                                <div class="col-sm hidden">
+                                                    <label for="columnTypeFrom{{column.columnOrder}}">From</label>
+                                                    <input type="number" class="form-control" id="columnTypeFrom{{column.columnOrder}}">
+                                                </div>
+                                                {% endif %}
+                                                {% if column.to %}
+                                                <div class="col-sm">
+                                                    <label for="columnTypeTo{{column.columnOrder}}">To</label>
+                                                    <input type="number" class="form-control" value="{{column.to}}" id="columnTypeTo{{column.columnOrder}}">
+                                                </div>
+                                                {% else %}
+                                                <div class="col-sm hidden">
+                                                    <label for="columnTypeTo{{column.columnOrder}}">To</label>
+                                                    <input type="number" class="form-control"  id="columnTypeTo{{column.columnOrder}}">
+                                                </div>
+                                                {% endif %}
+                                                <div class="col-sm float-right">
+                                                    <label for="columnOrder">Order</label>
+                                                    <div>
+                                                        <input type="text" class="col form-control" id="columnOrder{{column.columnOrder}}" value="{{column.columnOrder}}"readonly>
+                                                        <a href="#" class="col float-right text-size-large" id="delete-button"> Delete </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                {% endfor %}
                             </div>
+
                         </div>
             </form>
                                     <div class="container" id="columnCreator">
@@ -70,7 +135,7 @@
                                                         <input type="text" class="col form-control" id="columnOrder" readonly>
                                                         <a href="#" class="col float-right text-size-large" id="delete-button"> Delete </a>
                                                     </div>
-                                                    
+
                                                 </div>
                                             </div>
                                         <div class="row">

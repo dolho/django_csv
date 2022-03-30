@@ -1,0 +1,85 @@
+{% extends 'layout.html' %} 
+
+{% block body %}
+
+<section class="section-schema">
+    <div class="row">
+        <h2 class="table-name"> New schema </h2>
+    </div>
+    <div class="row">
+            <form method="POST" role="form" action="{% url 'create_schema' %}" onsubmit="convert_form_to_json(event)" id="schema_creation"> 
+            {% csrf_token %}
+                <div class="align-right position-relative">
+                    <button type="submit"  class="btn btn-primary btn-lg align-right position-relative " role="button" aria-pressed="true">Submit</button>
+                </div>
+                    <div class="form-group">
+                        <label for="schemaName">Name</label>
+                        <input type="text" class="form-control" name="schemaName" id="schemaName">
+                    </div>
+                    <div class="form-group">
+                        <label for="separatorColumn">Column separator</label>
+                        <select class="custom-select form-select-lg" name='separatorColumn' id="separatorColumn">
+                          <option value=",">Comma (,)</option>
+                          <option value="1">One</option>
+                          <option value="2">Two</option>
+                          <option value="3">Three</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="stringCharachter">String character</label>
+                        <select class="custom-select form-select-lg" name="stringCharachter" id="stringCharachter">
+                          <option value="&quot;">Double-quote (“)</option>
+                          <option value="1">One</option>
+                          <option value="2">Two</option>
+                          <option value="3">Three</option>
+                        </select>
+                      </div>
+                        <div class="form-group">
+                            <h2 class="table-name"> Schema columns </h2>
+                            <div class="container" id="listOfColumns">
+
+                            </div>
+                        </div>
+            </form>
+                                    <div class="container" id="columnCreator">
+                                            <div class="row" id="userCreatedColumn">
+                                                <div class="col">
+                                                    <label for="columnName">Name</label>
+                                                    <input type="text" class="form-control" id="columnName">
+                                                </div>
+                                                <div class="col">
+                                                    <label for="columnType">Type</label>
+                                                    <select class="custom-select form-select-lg" id="columnType" onchange="update_select(this);" required>
+                                                        <!-- <option value="">_____</option> -->
+                                                        <option value="full_name">Full name</option>
+                                                        <option value="job">Job</option>
+                                                        <option value="integer">Integer</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-sm hidden">
+                                                    <label for="columnTypeFrom">From</label>
+                                                    <input type="number" class="form-control" id="columnTypeFrom">
+                                                </div>
+                                                <div class="col-sm hidden">
+                                                    <label for="columnTypeTo">To</label>
+                                                    <input type="number" class="form-control" id="columnTypeTo">
+                                                </div>
+                                                <div class="col-sm float-right">
+                                                    <label for="columnOrder">Order</label>
+                                                    <div>
+                                                        <input type="text" class="col form-control" id="columnOrder" readonly>
+                                                        <a href="#" class="col float-right text-size-large" id="delete-button"> Delete </a>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button type="button" onclick="add_column()" class="btn btn-primary btn-lg" id="submitColumn">Add column</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                        </div>
+</section>
+
+{% endblock %}

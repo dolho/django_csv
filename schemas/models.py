@@ -14,4 +14,10 @@ class Schema(models.Model):
     modified = models.DateTimeField(default=datetime.datetime.now())
 
 
+class DataSet(models.Model):
+    uuid = models.UUIDField(primary_key=True, editable=False)
+    schema_id = models.ForeignKey(Schema, on_delete=models.DO_NOTHING)
+    time_of_creation = models.DateTimeField(blank=True, null=True)
+    path_to_file = models.URLField(blank=True, null=True)
+
 

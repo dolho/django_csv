@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block body %}
+
+<div class="container mt-5">
+    {% for error in errors %}
+        <div class="row mx-auto justify-content-center alert alert-danger">
+                            {{ error }}
+        </div>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

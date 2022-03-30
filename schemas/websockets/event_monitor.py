@@ -1,22 +1,35 @@
 import time
+from typing import Callable
+import logging
 
 class CSVMonitorThread():
 
-    def __init__(self, app, interval=1):
+    def __init__(self, app, interval=0):
         self.__app = app
         self.__state = app.events.State()
         self.interval = interval
         self.__uuid_function_success = dict()
         self.__uuid_function_processing = dict()
 
-    def add_uuid_function_pair_success(self, uuid, function):
+    def add_uuid_function_pair_success(self, uuid: str, function: Callable) -> None:
+        """
+        :param uuid: str
+        :param function: callable
+        :return: None
+        Sets function to call, when task with given uuid successfully finished
+        """
         self.__uuid_function_success[uuid] = function
 
-    def add_uuid_function_pair_processing(self, uuid, function):
+    def add_uuid_function_pair_processing(self, uuid: str, function: Callable):
+        """
+        :param uuid: str
+        :param function: callable
+        :return: None
+        Sets function to call, when task with given uuid started
+        """
         self.__uuid_function_processing[uuid] = function
 
     def successful_task(self, event):
-        print("Successfulltask worked")
         self.__state.event(event)
         task = self.__state.tasks.get(event['uuid'])
         try:
@@ -34,11 +47,11 @@ class CSVMonitorThread():
     def task_started(self, event):
         self.__state.event(event)
         task = self.__state.tasks.get(event['uuid'])
-        # try:
-        #     self.__uuid_function_processing[task.uuid]()
-        #     del self.__uuid_function_processing[task.uuid]
-        # except KeyError:
-        #     pass
+        try:
+            self.__uuid_function_processing[task.uuid]()
+            del self.__uuid_function_processing[task.uuid]
+        except KeyError:
+            pass
         # print('TASK STARTED: %s[%s] %s' % (
         #     task.name, task.uuid, task.info(),))
 
@@ -46,41 +59,25 @@ class CSVMonitorThread():
 
         if event['type'] != 'worker-heartbeat':
             self.__state.event(event)
-        # logic here
 
     def run(self):
-        print("Eventcatcher thread started")
         self.__app.control.enable_events()
         while True:
             try:
                 with self.__app.connection() as connection:
+                    print("Monitor is working")
                     recv = self.__app.events.Receiver(connection, handlers={
                         'task-succeeded': self.successful_task,
                         'task-started': self.task_started,
                         '*': self.catchall,
                     })
+                    print("Monitor worked")
                     recv.capture(limit=None, timeout=None, wakeup=True)
-
             except (KeyboardInterrupt, SystemExit):
                 raise
-
-            except Exception:
-                # unable to capture
+            except Exception as e:
+                logging.warning(e)
                 pass
-
-            time.sleep(self.interval)
-
-
-# def my_monitor(app):
-#     state = app.events.State()
-#
-#     def announce_failed_tasks(event):
-#         state.event(event)
-#         # task name is sent only with -received event, and state
-#         # will keep track of this for us.
-#         task = state.tasks.get(event['uuid'])
-#
-#         print('TASK FAILED: %s[%s] %s' % (
-#             task.name, task.uuid, task.info(),))
+            # time.sleep(self.interval)
 
 

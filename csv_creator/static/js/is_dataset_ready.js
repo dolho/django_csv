@@ -41,12 +41,12 @@ websocket.onerror = function(evt) { onError(evt) };
     console.log(jsonText)
     const messageObject = JSON.parse(jsonText)
     Object.setPrototypeOf(messageObject, AppMessage)
-    console.log(messageObject.type)
-    switch (messageObject.type) {
-      case MessageTypes.IS_CSV_READY: {
+    let type = messageObject.type
+      if (type === MessageTypes.IS_CSV_READY) {
           const payload = messageObject.payload
           onIsCSVReady(payload)
-      } default: throw new Error("Not supported message type: " + messageObject.type);
+      } else {
+         throw new Error("Not supported message type:" + messageObject.type);
     }
  }
       
@@ -71,8 +71,12 @@ websocket.onerror = function(evt) { onError(evt) };
  function onIsCSVReady(payload) {
    if (payload["status"] == StatusCSV.PROCESSING) {
       setStatusProcessing("status" + payload["id"])
+      hide_action(payload["id"])
    } else if (payload["status"] == StatusCSV.READY) {
       setStatusReady("status" + payload["id"])
+      unhide_action(payload["id"])
+      set_time(payload["id"], payload["time"])
+      set_download_path(payload["id"], payload["path"])
    }
  }
 
@@ -101,4 +105,22 @@ websocket.onerror = function(evt) { onError(evt) };
    ready_button.classList.add("btn", "btn-secondary", "full-opacity", "disabled")
    ready_button.style.opacity = 1
    element_to_replace.replaceWith(ready_button)
+ }
+
+ function hide_action(uuid) {
+   let element_to_hide = document.getElementById("action" + uuid)
+   element_to_hide.style.visibility = "hidden"
+ }
+
+ function unhide_action(uuid) {
+   let element_to_unhide = document.getElementById("action" + uuid)
+   element_to_unhide.style.visibility = "visible"
+ }
+
+ function set_time(uuid, time) {
+   document.getElementById("time" + uuid).innerText = time
+ }
+
+ function set_download_path(uuid, path) {
+   document.getElementById("download" + uuid).action = path
  }

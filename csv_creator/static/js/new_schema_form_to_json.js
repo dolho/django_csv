@@ -40,14 +40,18 @@ function convert_form_to_json(event) {
     form_dict['columns'].push(column)
 
     var oReq = new XMLHttpRequest();
-    oReq.onreadystatechange = function() {
-        console.log(this.status)
+    oReq.onreadystatechange = function(data) {
         if (this.readyState !== 4) {
             return
         }
         if (this.status === 200 ) {
             location.href = this.responseURL
           } 
+        if (this.status === 403) {
+            console.log(data)
+            let data_json = JSON.parse(oReq.responseText)
+            alert(data_json['error'])
+        }
       };
     oReq.open("POST",  document.getElementById('schema_creation').getAttribute("action"))
     oReq.setRequestHeader('X-CSRFToken', getCookie('csrftoken'))

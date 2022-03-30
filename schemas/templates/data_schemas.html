@@ -27,8 +27,15 @@
                 <td><a href="{% url 'create_data_set' schema.id %}">{{schema.name}}</a></td>
                 <td>{{schema.modified}}</td>
                 <td>
-                    <a href="#" class="btn btn-link">Edit schema</a>
-                    <a id="delete-button" href="###" class="btn btn-link" role="button" aria-pressed="true">Delete</a>
+                    <div class="row">
+                        <form action="{% url 'edit_schema' schema.id %}" method="get">
+                            <button type="submit" href="#" class="btn btn-link">Edit schema</button>
+                        </form>
+                        <form action="{% url 'delete_schema' schema.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" id="delete-button" href="###" class="btn btn-link" role="button" aria-pressed="true">Delete</button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             {% endfor %}

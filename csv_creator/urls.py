@@ -15,16 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from schemas import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('schemas.urls')),
-    # path('', views.index, name='index'),
-    # path('accounts/', include('django.contrib.auth.urls'), name='login'),
-    path('accounts/login/', views.login_view, name='login'),
-    # path('schemas/', views.create_schema, name='create_schema'),
-    # path('schemas/<int:schema_id>/data-sets/', views.create_data_set, name='create_data_set'),
-    # path('schemas/<int:schema_id>/data-sets/<str:timestamp>', views.load_data_set, name='load_data_set'),
-    # path('ws/', IsCSVReadyConsumer.as_asgi())
+    path('accounts/', include('accounts.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

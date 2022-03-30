@@ -1,12 +1,37 @@
+
 var order = 0
 
+function set_current_order() {
+    console.log("set current order worked")
+    let new_order = document.getElementById("currentOrder").innerText
+    console.log("New order ", new_order)
+    if (new_order) {
+        order = parseInt(new_order) + 1
+        console.log("Global order", order)
+        return order
+    } else {
+        order = 0
+        return 0 
+    }
+    
+    
+}
+set_current_order()
+
+// function increment_order() {
+//     let order = current_order()
+//     order += 1
+//     document.getElementById("currentOrder").value = order
+//     return order
+// }
 
 function add_column() {
+    
     
 
     var inputs = document.getElementById("columnCreator").querySelectorAll("input,select,label");  
     // console.log(inputs);
-    // console.log(order)
+    console.log(order)
 
     for (let i = 0; i < inputs.length; i++) {
         if (inputs[i].id.startsWith('columnOrder')) {

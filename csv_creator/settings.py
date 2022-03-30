@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import find_dotenv, load_dotenv
+import os
+load_dotenv(find_dotenv())
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-8+!t4e*ykshcitxgkl(4uw)@yo(_8$fc0c4a#w-)i=1vki5p1x'
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -39,14 +42,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'csv_creator',
-
     'django_celery_results',
     'schemas',
+    'cloudinary',
+    'accounts',
 
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -105,7 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -132,8 +136,33 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ASGI_APPLICATION = "csv_creator.asgi.application"
 
+# Celery Section
 CELERY_SEND_EVENTS = True
 CELERY_SEND_SENT_EVENT = True
-# CELERY_BROKER_BACKEND = "db+sqlite:///celery.sqlite"
 CELERY_CACHE_BACKEND = 'django-cache'
 CELERY_RESULT_BACKEND = 'django-db'
+
+# Whitenoise Section
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Cloudinary Section
+
+CLOUD_NAME = os.environ['CLOUD_NAME']
+CLOUD_API_KEY = os.environ['CLOUD_API_KEY']
+CLOUD_API_SECRET = os.environ['CLOUD_API_SECRET']
+
+# Custom User model section
+AUTH_USER_MODEL = 'accounts.CustomUser'
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'login'
+
+# Regular account limitations
+REGULAR_LIMIT_OF_SCHEMA_COLUMNS = 10
+REGULAR_LIMIT_OF_SCHEMAS = 5
+
+REGULAR_LIMIT_OF_DATASET_ROWS = 500_000
+REGULAR_LIMIT_OF_DATASETS_PER_SCHEMA = 2
+
+
+

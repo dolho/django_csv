@@ -25,11 +25,11 @@
     padding-bottom: 25%;
 }
 
-#form-element {
+.form-element {
     padding: 5px 0;
 }
 
-#username, #password {
+.username, .password, .email {
     border-color: lightgray;
     border-style: solid;
     border-radius: 5px;
@@ -40,6 +40,3 @@ h2, h4 {
     text-align: center;
 }
 
-#login-form {
-    width: 50%;
-}
