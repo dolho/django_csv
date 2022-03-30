@@ -28,7 +28,7 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -129,6 +129,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -144,8 +145,10 @@ CELERY_RESULT_BACKEND = 'django-db'
 
 # Whitenoise Section
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [
+   os.path.join(BASE_DIR, 'csv_creator/staticfiles/')
+]
 # Cloudinary Section
 
 CLOUD_NAME = os.environ['CLOUD_NAME']
@@ -164,5 +167,26 @@ REGULAR_LIMIT_OF_SCHEMAS = 5
 REGULAR_LIMIT_OF_DATASET_ROWS = 500_000
 REGULAR_LIMIT_OF_DATASETS_PER_SCHEMA = 2
 
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#        'file': {
+#            'level': 'DEBUG',
+#            'class': 'logging.FileHandler',
+#            'filename': 'log.django',
+#        },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console','file'],
+#             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+#         },
+#     },
+# }
 
 
